@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FromJSONToHTMLTable</title>
+    <style>
+        table,th{
+            border:groove;
+            border-collapse: collapse;
+        }
+        td{
+            border: 1px solid black;
+        }
+        td,th{
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+    </div>
+    <script>
+        function FromJSONToHTMLTable(input){
+            let arr = JSON.parse(input);
+            let outputArr = ["<table>"];
+            outputArr.push(makeKeyRow(arr));
+            arr.forEach(element =>  outputArr.push(makeValueRow(element)));
+            outputArr.push("</table>");
+
+            function makeKeyRow(arr){
+                let result = "<tr>";
+                let obj = arr[0];
+                let keys = Object.keys(obj);
+                keys.forEach(element => {
+                    result += `<th>${element}</th>`;
+                });
+                result += "</tr>";
+
+                return result;
+                //return escapeHtml(result);
+            };
+            
+            function makeValueRow(element){
+                let result = "<tr>";
+                let vals = Object.values(element);
+                
+                vals.forEach(val => {
+                    result += `<td>${val}</td>`;
+                });
+                result += "</tr>";
+                
+                return result;
+                //return escapeHtml(result);
+            };
+
+            function escapeHtml(value){
+                return new Option(value).innerHTML;
+            };
+
+            return outputArr.join('\n');
+        }
+        window.onload = function (){
+            let container = document.getElementById('wrapper');
+            container.innerHTML = FromJSONToHTMLTable(['[{"Name":"Stamat","Price":5.5},{"Name":"Rumen","Price":6}]']);
+        }
+    </script>
+</body>
+</html>
